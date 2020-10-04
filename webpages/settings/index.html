@@ -156,6 +156,16 @@
                   v-if="setting.type === 'color'"
                   :placeholder="setting.default"
                 />
+                <button
+                  class="setting-input color"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @click="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'color'"
+                  :placeholder="setting.default"
+                >
+                  Revert color to default
+                </button>
                 <div class="filter-options" v-if="setting.type === 'select'">
                   <div
                     class="filter-option"
