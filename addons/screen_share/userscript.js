@@ -7,7 +7,7 @@ inject_script.innerHTML = `
 		if(window.confirm("Scratch is requesting to use your camera.\\nWould you like to screenshare instead of using your camera?"))
 			return window.navigator.mediaDevices.getDisplayMedia.call(this, arguments);
 		else
-			return oldGetUserMedia.call(this, arguments[0])
+			return oldGetUserMedia.call(this, arguments[0]);
 	};
 	window.navigator.getUserMedia = navigator.mediaDevices.getUserMedia;
 })()
