@@ -1,12 +1,12 @@
 {
-  "manifest_version": 2,
-  "name": "Scratch Camera To Screen",
-  "description": "Replace Scratch's permissions for camera with permission to screen share!",
+  "name": "Screen Share",
+  "description": "Creates a popup every time Scratch requests for your camera, which allows you to replace your camera with your screen if you want.",
   "version": "0.0",
-  "content_scripts": [
+  "userscripts": [
     {
-      "matches": ["https://scratch.mit.edu/*"],
-      "js": ["scratch_screen.js"]
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
-  ]
+  ],
+  "tags": ["editor"]
 }
