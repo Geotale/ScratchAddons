@@ -16,6 +16,8 @@
       ]
     }
   ],
-  "tags": ["community"],
-  "enabled_by_default": false
+  "tags": ["community", "beta"],
+  "libraries": ["linkify"],
+  "enabledByDefault": false,
+  "l10n": true
 }

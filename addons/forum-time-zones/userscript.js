@@ -1,5 +1,5 @@
 export default async function ({ addon, _global, _console }) {
-  await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js");
+  const { default: moment } = await import(addon.self.lib + "/moment.js");
 
   moment.locale(addon.auth.scratchLang == "en" ? "en-gb" : addon.auth.scratchLang);
   const forum_topic_id = parseInt(
@@ -12,7 +12,8 @@ export default async function ({ addon, _global, _console }) {
       throw "fetch error";
     })
     .then((res) => res.json())
-    .then((data) => {
+    .then(async (data) => {
+      await addon.tab.waitForElement(".blockpost");
       Array.prototype.map
         .call(document.getElementsByClassName("blockpost"), (e) => parseInt(e.id.replace("p", "")))
         .forEach((e) => {

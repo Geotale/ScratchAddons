@@ -29,7 +29,7 @@ class StateProxy {
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
-    messageForAllTabs({ newGlobalState: target });
+    messageForAllTabs({ newGlobalState: _globalState });
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
       stateChange(this.name, key, value);
@@ -40,6 +40,9 @@ class StateProxy {
 }
 
 function messageForAllTabs(message) {
+  // May log errors to the console in Firefox, where we don't have the permission
+  // to read URLs from tabs even if we have content scripts on them.
+  // No need to specify frame IDs, because this message should also arrive to iframes.
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
       (tab) => (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id, message)
@@ -48,25 +51,9 @@ function messageForAllTabs(message) {
 }
 
 function stateChange(parentObjectPath, key, value) {
-  const stackTrace = new Error().stack.split("\n")[3];
-  let setterUrl = stackTrace.substring(
-    stackTrace.includes("@")
-      ? stackTrace.indexOf("@") + 1
-      : stackTrace.includes("(")
-      ? stackTrace.indexOf("(") + 1
-      : stackTrace.indexOf("at ") + 3,
-    stackTrace.includes(")") ? stackTrace.indexOf(")") : stackTrace.length
-  );
-
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
-  console.log(
-    `%c${objectPath}`,
-    "font-weight: bold;",
-    "is now: ",
-    objectPathArr[0] === "auth" ? "[redacted]" : value,
-    `\nChanged by: ${setterUrl}`
-  );
+  console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
     messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
