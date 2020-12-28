@@ -1,16 +1,12 @@
 {
-	"manifest_version" : 2,
-	"name" : "Scratch Camera To Screen",
-	"description" : "Replace Scratch's permissions for camera with permission to screen share!",
-	"version" : "0.0",
-	"content_scripts" : [
-		{
-			"matches" : [
-				"https://scratch.mit.edu/*"
-			],
-			"js" : [
-				"scratch_screen.js"
-			]
-		}
-	]
+  "manifest_version": 2,
+  "name": "Scratch Camera To Screen",
+  "description": "Replace Scratch's permissions for camera with permission to screen share!",
+  "version": "0.0",
+  "content_scripts": [
+    {
+      "matches": ["https://scratch.mit.edu/*"],
+      "js": ["scratch_screen.js"]
+    }
+  ]
 }
